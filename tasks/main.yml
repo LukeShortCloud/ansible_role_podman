@@ -1,0 +1,16 @@
+---
+- name: Include Debian and Ubuntu tasks
+  include_tasks:
+    file: Debian.yml
+  when: ansible_os_family == "Debian"
+
+- name: Install Podman related packages
+  package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ podman_packages }}"
+
+- name: Verify that the binaries are working
+  command: "{{ item }} --version"
+  changed_when: false
+  loop: "{{ podman_packages }}"

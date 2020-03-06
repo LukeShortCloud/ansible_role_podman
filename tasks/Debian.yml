@@ -1,0 +1,15 @@
+---
+- name: Set fact for libcontainers_repo_url
+  set_fact:
+    libcontainers_repo_url: "https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/{% if ansible_distribution == 'Ubuntu' %}x{% endif %}{{ ansible_distribution }}_{{ ansible_distribution_version }}"
+
+- name: Add GPG key for libcontainers repository
+  apt_key:
+    url: "{{ libcontainers_repo_url }}/Release.key"
+    keyring: /etc/apt/trusted.gpg.d/libcontainers.gpg
+    state: present
+
+- name: Add Apt repository for libcontainers
+  apt_repository:
+    repo: "deb {{ libcontainers_repo_url }}/ /"
+    state: present
